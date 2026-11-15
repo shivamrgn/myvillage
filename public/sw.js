@@ -2,7 +2,7 @@
 // Gram Samadhan — Offline Service Worker
 // Enables rural offline browsing, fast asset retrieval, and network resilience.
 
-const CACHE_NAME = 'gram-samadhan-v1';
+const CACHE_NAME = 'gram-samadhan-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -63,9 +63,16 @@ self.addEventListener('fetch', (event) => {
   // 2. HTML navigation requests (Network-first with index.html fallback for SPA)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match('/index.html') || caches.match('/');
-      })
+      fetch(event.request)
+        .then((res) => {
+          if (res.status === 404) {
+            return caches.match('/index.html').then((cached) => cached || res);
+          }
+          return res;
+        })
+        .catch(() => {
+          return caches.match('/index.html') || caches.match('/');
+        })
     );
     return;
   }

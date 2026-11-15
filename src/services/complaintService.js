@@ -728,7 +728,29 @@ export const complaintService = {
 
   // ── Dashboard stats ──────────────────────────────────────────────────────────
   async getStats() {
-    const { complaints: all } = await this.getComplaints({ pageSize: 1000 });
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const [totalRes, pendingRes, inProgressRes, resolvedRes] = await Promise.all([
+          supabase.from('complaints').select('id', { count: 'exact', head: true }),
+          supabase.from('complaints').select('id', { count: 'exact', head: true }).eq('status', STATUS_TYPES.PENDING),
+          supabase.from('complaints').select('id', { count: 'exact', head: true }).eq('status', STATUS_TYPES.IN_PROGRESS),
+          supabase.from('complaints').select('id', { count: 'exact', head: true }).eq('status', STATUS_TYPES.RESOLVED),
+        ]);
+        if (totalRes.count !== null && totalRes.count !== undefined) {
+          return {
+            total:      totalRes.count ?? 0,
+            pending:    pendingRes.count ?? 0,
+            inProgress: inProgressRes.count ?? 0,
+            resolved:   resolvedRes.count ?? 0,
+          };
+        }
+      } catch (err) {
+        console.warn('[complaintService] Fast count error, falling back:', err);
+      }
+    }
+
+    // Direct local store count (instant on localhost)
+    const all = readLocal();
     return {
       total:      all.length,
       pending:    all.filter(c => c.status === STATUS_TYPES.PENDING).length,

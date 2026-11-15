@@ -139,13 +139,13 @@ export const ComplaintDetailPage = () => {
           <span>{isHindi ? 'शिकायतों की सूची पर लौटें' : 'Back to Complaints List'}</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <Button
             type="button"
             variant={showStatusPanel ? 'secondary' : 'primary'}
             icon={Settings}
             onClick={() => setShowStatusPanel(!showStatusPanel)}
-            className="font-bold min-h-[46px]"
+            className="w-full sm:w-auto font-bold min-h-[44px] justify-center text-xs sm:text-sm"
           >
             {showStatusPanel
               ? (isHindi ? 'फॉर्म बंद करें' : 'Close Status Form')

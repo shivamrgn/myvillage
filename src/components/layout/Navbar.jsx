@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, FileText, Search, HelpCircle, Shield, UserCheck } from 'lucide-react';
 import { LanguageToggle } from '../common/LanguageToggle';
@@ -19,6 +19,18 @@ export const Navbar = () => {
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  const closeMenu = useCallback(() => setIsOpen(false), []);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-civic-border">
@@ -104,34 +116,75 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {isOpen && (
-        <div className="md:hidden border-t border-civic-border bg-white px-4 pt-3 pb-6 space-y-2">
-          {navLinks.map((link) => {
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-bold min-h-[48px] ${
-                  isActive(link.to)
-                    ? 'bg-[#EAF3FF] text-[#123B68] border border-blue-200'
-                    : link.highlight
-                    ? 'bg-[#1769C2] text-white shadow-xs'
-                    : 'text-slate-800 hover:bg-slate-50'
-                }`}
-              >
-                {Icon && <Icon className="w-5 h-5 shrink-0" />}
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
+      {/* Mobile Slide-in Drawer + Overlay */}
+      <div className="md:hidden">
+        {/* Semi-transparent dark overlay */}
+        <div
+          className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
+            isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
 
-          <div className="pt-3 border-t border-slate-100">
+        {/* Slide-in panel from left */}
+        <div
+          className={`fixed top-0 left-0 h-full w-[280px] max-w-[80vw] bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+            isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between p-4 border-b border-civic-border bg-slate-50/70">
+            <Link
+              to="/"
+              onClick={closeMenu}
+              className="flex items-center gap-2.5"
+            >
+              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-xs">
+                GS
+              </div>
+              <span className="font-extrabold text-base text-primary-dark">
+                {isHindi ? 'ग्राम समाधान' : 'Gram Samadhan'}
+              </span>
+            </Link>
+            <button
+              onClick={closeMenu}
+              className="p-2 rounded-xl text-civic-text hover:bg-slate-100 touch-target"
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Nav Links */}
+          <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={closeMenu}
+                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-bold min-h-[48px] ${
+                    isActive(link.to)
+                      ? 'bg-[#EAF3FF] text-[#123B68] border border-blue-200'
+                      : link.highlight
+                      ? 'bg-[#1769C2] text-white shadow-xs'
+                      : 'text-slate-800 hover:bg-slate-50'
+                  }`}
+                >
+                  {Icon && <Icon className="w-5 h-5 shrink-0" />}
+                  <span>{link.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Admin Portal Link at bottom */}
+          <div className="p-4 border-t border-slate-100">
             <Link
               to={isAdmin ? '/admin/dashboard' : '/admin/login'}
-              onClick={() => setIsOpen(false)}
+              onClick={closeMenu}
               className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl text-sm font-bold text-primary-dark bg-primary-light border border-blue-200 min-h-[48px]"
             >
               <Shield className="w-4 h-4 text-primary" />
@@ -139,7 +192,7 @@ export const Navbar = () => {
             </Link>
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 };

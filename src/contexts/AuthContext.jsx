@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase, isSupabaseConfigured } from '../services/supabaseClient';
 
 export const AuthContext = createContext(null);
@@ -165,17 +165,20 @@ export const AuthProvider = ({ children }) => {
 
   const isAdmin = checkIsAdminUser(user);
 
-  const value = {
-    user,
-    loading,
-    isAdmin,
-    adminRole: user?.app_metadata?.role || user?.user_metadata?.role || 'panchayat_admin',
-    adminName: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Gram Panchayat Admin',
-    adminVillage: user?.user_metadata?.village || 'ग्राम पंचायत सुंदरपुर',
-    login,
-    logout,
-    resetPassword,
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      isAdmin,
+      adminRole: user?.app_metadata?.role || user?.user_metadata?.role || 'panchayat_admin',
+      adminName: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Gram Panchayat Admin',
+      adminVillage: user?.user_metadata?.village || 'ग्राम पंचायत सुंदरपुर',
+      login,
+      logout,
+      resetPassword,
+    }),
+    [user, loading, isAdmin, login, logout, resetPassword]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

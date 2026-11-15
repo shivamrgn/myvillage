@@ -32,7 +32,7 @@
 .bg-primary,
 button.bg-primary,
 .btn-primary,
-[class*="bg-"][class*="1769C2"] {
+[class~="bg-[#1769C2]"] {
   background-color: #1769C2 !important;
   color: #FFFFFF !important;
 }
@@ -40,7 +40,7 @@ button.bg-primary,
 .bg-primary:hover,
 button.bg-primary:hover,
 .btn-primary:hover,
-[class*="bg-"][class*="1769C2"]:hover {
+[class~="bg-[#1769C2]"]:hover {
   background-color: #1358A3 !important;
   color: #FFFFFF !important;
 }

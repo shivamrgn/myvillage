@@ -42,6 +42,8 @@ export const ComplaintListingPage = () => {
   // ── Filters State ──────────────────────────────────────────────────────────
   const [ticketSearch, setTicketSearch] = useState(initialSearch);
   const [nameSearch, setNameSearch] = useState('');
+  const [debouncedTicketSearch, setDebouncedTicketSearch] = useState(initialSearch);
+  const [debouncedNameSearch, setDebouncedNameSearch] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(initialStatus);
   const [selectedLanguage, setSelectedLanguage] = useState('all'); // 'all' | 'hi' | 'en'
   const [dateFilterMode, setDateFilterMode] = useState('all'); // 'all' | 'today' | '7days' | '30days' | 'custom'
@@ -49,6 +51,21 @@ export const ComplaintListingPage = () => {
   const [customDateTo, setCustomDateTo] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+
+  // Debounce search queries (300ms) to prevent unnecessary duplicate requests
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTicketSearch(ticketSearch);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [ticketSearch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedNameSearch(nameSearch);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [nameSearch]);
 
   // Calculate actual Date From and Date To based on dateFilterMode (timezone-aware)
   const { computedDateFrom, computedDateTo } = useMemo(() => {
@@ -84,8 +101,8 @@ export const ComplaintListingPage = () => {
     setFetchError(null);
     try {
       const result = await complaintService.getComplaints({
-        ticketCode: ticketSearch.trim(),
-        name:       nameSearch.trim(),
+        ticketCode: debouncedTicketSearch.trim(),
+        name:       debouncedNameSearch.trim(),
         status:     selectedStatus,
         language:   selectedLanguage,
         dateFrom:   computedDateFrom,
@@ -108,8 +125,8 @@ export const ComplaintListingPage = () => {
       setIsLoading(false);
     }
   }, [
-    ticketSearch,
-    nameSearch,
+    debouncedTicketSearch,
+    debouncedNameSearch,
     selectedStatus,
     selectedLanguage,
     computedDateFrom,
@@ -127,6 +144,8 @@ export const ComplaintListingPage = () => {
   const handleResetFilters = () => {
     setTicketSearch('');
     setNameSearch('');
+    setDebouncedTicketSearch('');
+    setDebouncedNameSearch('');
     setSelectedStatus('all');
     setSelectedLanguage('all');
     setDateFilterMode('all');
@@ -210,7 +229,7 @@ export const ComplaintListingPage = () => {
           icon={Download}
           onClick={exportToCSV}
           disabled={complaints.length === 0}
-          className="font-semibold min-h-[46px] self-start sm:self-auto"
+          className="w-full sm:w-auto font-semibold min-h-[44px] justify-center text-xs sm:text-sm"
         >
           {isHindi ? 'CSV रिपोर्ट डाउनलोड करें' : 'Export CSV Report'}
         </Button>
@@ -548,8 +567,8 @@ export const ComplaintListingPage = () => {
 
               return (
                 <div key={item.id} className="p-4 space-y-2.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-xs font-bold text-primary bg-primary-light px-2.5 py-0.5 rounded-lg border border-blue-200">
+                  <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                    <span className="font-mono text-xs font-bold text-primary bg-primary-light px-2.5 py-0.5 rounded-lg border border-blue-200 whitespace-nowrap">
                       {item.ticket_code || item.tracking_id}
                     </span>
                     <Badge variant={statusCfg.badgeVariant} size="sm" dot>
@@ -591,12 +610,12 @@ export const ComplaintListingPage = () => {
                   {/* Actions */}
                   <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                     <Link to={`/admin/complaint/${item.id}`} className="flex-1">
-                      <Button size="sm" variant="secondary" icon={Eye} className="w-full min-h-[44px]">
+                      <Button size="sm" variant="secondary" icon={Eye} className="w-full min-h-[40px] text-xs font-bold whitespace-nowrap justify-center">
                         {t('admin.viewDetails')}
                       </Button>
                     </Link>
                     <Link to={`/admin/manage/${item.id}`} className="flex-1">
-                      <Button size="sm" variant="primary" icon={Settings} className="w-full min-h-[44px]">
+                      <Button size="sm" variant="primary" icon={Settings} className="w-full min-h-[40px] text-xs font-bold whitespace-nowrap justify-center">
                         {t('admin.manageAction')}
                       </Button>
                     </Link>

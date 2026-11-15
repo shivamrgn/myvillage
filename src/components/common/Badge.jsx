@@ -31,7 +31,7 @@ export const Badge = ({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border ${
+      className={`inline-flex items-center gap-1.5 rounded-full border whitespace-nowrap shrink-0 ${
         variants[variant] || variants.default
       } ${sizes[size] || sizes.md} ${className}`}
     >
@@ -41,7 +41,7 @@ export const Badge = ({
           aria-hidden="true"
         />
       )}
-      <span>{children}</span>
+      <span className="whitespace-nowrap">{children}</span>
     </span>
   );
 };

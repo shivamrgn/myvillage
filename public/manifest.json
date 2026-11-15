@@ -1,0 +1,37 @@
+{
+  "name": "ग्राम समाधान | Gram Samadhan",
+  "short_name": "ग्राम समाधान",
+  "description": "ग्राम पंचायत नागरिक शिकायत निवारण सेवा (Village Grievance Redressal Portal)",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1769C2",
+  "lang": "hi-IN",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "शिकायत दर्ज करें (Report Grievance)",
+      "short_name": "शिकायत दर्ज करें",
+      "description": "नई ग्राम समस्या या शिकायत दर्ज करें",
+      "url": "/report",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "स्थिति जांचें (Track Status)",
+      "short_name": "स्थिति जांचें",
+      "description": "अपनी शिकायत की स्थिति ट्रैक करें",
+      "url": "/track",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}
+

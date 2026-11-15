@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #25364A;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Accessible focus indicators with primary blue */
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(23, 105, 194, 0.35);
+  }
+}
+
+/* Touch targets for mobile ergonomics */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Direct CSS guarantees for civic palette so buttons and text are always 100% visible */
+.bg-primary,
+button.bg-primary,
+.btn-primary,
+[class*="bg-"][class*="1769C2"] {
+  background-color: #1769C2 !important;
+  color: #FFFFFF !important;
+}
+
+.bg-primary:hover,
+button.bg-primary:hover,
+.btn-primary:hover,
+[class*="bg-"][class*="1769C2"]:hover {
+  background-color: #1358A3 !important;
+  color: #FFFFFF !important;
+}
+
+.text-primary {
+  color: #1769C2 !important;
+}
+
+.text-primary-dark {
+  color: #123B68 !important;
+}
+
+.bg-primary-light {
+  background-color: #EAF3FF !important;
+}
+
+.border-primary {
+  border-color: #1769C2 !important;
+}
+
+/* Guarantee dark, crisp text on light toggles and content */
+.text-slate-800,
+.text-civic-text {
+  color: #1E293B !important;
+}
+
+/* Minimalist indicator for active recording */
+.record-pulse {
+  animation: pulse-simple 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-simple {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Clean Print Styles for Citizen Grievance Receipt */
+@media print {
+  header,
+  footer,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-receipt-container {
+    box-shadow: none !important;
+    border: 2px solid #000000 !important;
+    padding: 24px !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+}

@@ -1,0 +1,40 @@
+import React, { createContext, useState, useCallback, useMemo } from 'react';
+
+export const ToastContext = createContext(null);
+
+export const ToastProvider = ({ children }) => {
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = useCallback((message, type = 'info', duration = 3500) => {
+    const id = Date.now() + Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { id, message, type }]);
+
+    if (duration > 0) {
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, duration);
+    }
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const toast = useMemo(
+    () => ({
+      success: (msg, duration) => addToast(msg, 'success', duration),
+      error: (msg, duration) => addToast(msg, 'error', duration),
+      info: (msg, duration) => addToast(msg, 'info', duration),
+      warning: (msg, duration) => addToast(msg, 'warning', duration),
+      remove: removeToast,
+    }),
+    [addToast, removeToast]
+  );
+
+  return (
+    <ToastContext.Provider value={{ toast, toasts, removeToast }}>
+      {children}
+    </ToastContext.Provider>
+  );
+};
+

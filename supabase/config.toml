@@ -1,0 +1,40 @@
+# Supabase local development & Edge Function configuration for Gram Samadhan
+project_id = "gram-samadhan"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+# ── Edge Functions JWT Verification ───────────────────────────────────────────
+# Public citizen endpoints accept anonymous requests (verified by server-side
+# validation and ticket_code lookup, not user JWTs).
+[functions.submit-complaint]
+verify_jwt = false
+
+[functions.track-complaint]
+verify_jwt = false
+
+[functions.transcribe-audio]
+verify_jwt = false
+
+[functions.speech-to-text]
+verify_jwt = false
+
+# Admin endpoints strictly require a valid JWT AND app_metadata.role check
+[functions.admin-complaints]
+verify_jwt = true
+
+[functions.admin-auth]
+verify_jwt = true
+

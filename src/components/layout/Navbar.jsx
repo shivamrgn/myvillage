@@ -22,24 +22,22 @@ export const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-civic-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 sm:h-20">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Brand Logo & Name */}
           <Link
             to="/"
-            className="flex items-center gap-3 focus:outline-none"
+            className="flex items-center gap-2.5 sm:gap-3 focus:outline-none min-w-0"
             aria-label="Gram Samadhan Home"
           >
-            <div className="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-lg tracking-wider shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-base sm:text-lg tracking-wider shrink-0 shadow-xs">
               GS
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg sm:text-xl text-primary-dark tracking-tight">
-                  {isHindi ? 'ग्राम समाधान' : 'Gram Samadhan'}
-                </span>
-              </div>
-              <p className="text-xs text-civic-muted hidden xs:block">
+            <div className="min-w-0">
+              <span className="font-extrabold text-base sm:text-xl text-primary-dark tracking-tight whitespace-nowrap block">
+                {isHindi ? 'ग्राम समाधान' : 'Gram Samadhan'}
+              </span>
+              <p className="text-xs text-civic-muted hidden md:block">
                 {t('app.subtitle')}
               </p>
             </div>
@@ -93,11 +91,11 @@ export const Navbar = () => {
           </nav>
 
           {/* Mobile Right Controls */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-1.5 sm:gap-2 md:hidden shrink-0">
             <LanguageToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 rounded-xl text-civic-text hover:bg-slate-100 touch-target flex items-center justify-center"
+              className="p-2 sm:p-2.5 rounded-xl text-civic-text hover:bg-slate-100 touch-target flex items-center justify-center"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

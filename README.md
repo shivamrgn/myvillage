@@ -1,9 +1,9 @@
-<<<<<<< HEAD
 # 🌾 ग्राम समाधान (Gram Samadhan)
 ### Village Grievance Reporting & Redressal System
 
 **Gram Samadhan** is a production-ready, voice-enabled civic web application built to empower rural Indian citizens. Villagers can report local civic grievances (drinking water, roads, electricity, sanitation, healthcare, schooling) using **live speech-to-text or voice recordings in Hindi and English**, track grievance status transparently with an automated ticket ID, and enable Gram Panchayat administrators (Sarpanch, Gram Sachiv, Block Officers) to review, assign, and resolve civic complaints.
 
+LIVE URL :- https://myvillage-two.vercel.app/
 ---
 
 ## 🏛️ Architecture Overview
